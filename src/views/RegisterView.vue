@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import Button from '@/components/atoms/Button.vue'
+import Input from '@/components/atoms/Input.vue'
 
 const formData = ref({
   username: '',
@@ -9,7 +11,7 @@ const formData = ref({
 })
 
 const handleRegister = () => {
-  console.log('Register attempt:', formData.value) 
+  console.log('Register attempt:', formData.value)
 }
 </script>
 
@@ -25,64 +27,60 @@ const handleRegister = () => {
         <label class="block text-sm font-medium text-gray-700 mb-1">
           Username <span class="text-red-500">*</span>
         </label>
-        <input
+        <Input
           v-model="formData.username"
           type="text"
           required
           placeholder="Choose a username"
-          class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
         />
       </div>
-      
+
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-1">
           Email <span class="text-red-500">*</span>
         </label>
-        <input
+        <Input
           v-model="formData.email"
           type="email"
           required
           placeholder="your@email.com"
-          class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
         />
       </div>
-      
+
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-1">
           Password <span class="text-red-500">*</span>
         </label>
-        <input
+        <Input
           v-model="formData.password"
           type="password"
           required
           placeholder="Create a password"
-          class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
         />
       </div>
-      
+
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-1">
           Confirm Password <span class="text-red-500">*</span>
         </label>
-        <input
+        <Input
           v-model="formData.confirmPassword"
           type="password"
           required
           placeholder="Confirm your password"
-          class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
         />
       </div>
-      
-      <button
+
+      <Button
         type="submit"
-        class="w-full bg-gradient-to-r from-pink-600 to-purple-600 text-white py-2.5 rounded-lg font-medium hover:from-pink-700 hover:to-purple-700 transition-all shadow-md hover:shadow-lg"
+        fullWidth
       >
         Create Account
-      </button>
+      </Button>
     </form>
 
     <p class="text-center text-gray-600">
-      Already have an account? 
+      Already have an account?
       <RouterLink to="/login" class="text-pink-600 font-medium hover:underline">
         Login here
       </RouterLink>

@@ -1,11 +1,23 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import Button from '@/components/atoms/Button.vue'
+import Input from '@/components/atoms/Input.vue'
+import Modal from '@/components/organisms/Modal.vue'
 
 const email = ref('')
 const password = ref('')
 
+const showErrorModal = ref(false)
+const errorMessage = ref('')
+
 const handleLogin = () => {
-  console.log('Login attempt:', email.value)  
+  if (!email.value || !password.value) {
+    errorMessage.value = 'Please fill in both email and password.'
+    showErrorModal.value = true
+    return
+  }
+  console.log('Login attempt:', email.value)
+  console.log('Password:', password.value)
 }
 </script>
 
@@ -21,41 +33,44 @@ const handleLogin = () => {
         <label class="block text-sm font-medium text-gray-700 mb-1">
           Email <span class="text-red-500">*</span>
         </label>
-        <input
+        <Input
           v-model="email"
           type="email"
-          required
           placeholder="your@email.com"
-          class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
         />
       </div>
-      
+
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-1">
           Password <span class="text-red-500">*</span>
         </label>
-        <input
+        <Input
           v-model="password"
           type="password"
-          required
           placeholder="Enter your password"
-          class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
         />
       </div>
-      
-      <button
+
+      <Button
         type="submit"
-        class="w-full bg-gradient-to-r from-pink-600 to-purple-600 text-white py-2.5 rounded-lg font-medium hover:from-pink-700 hover:to-purple-700 transition-all shadow-md hover:shadow-lg"
+        fullWidth
       >
         Login
-      </button>
+      </Button>
     </form>
 
     <p class="text-center text-gray-600">
-      Don't have an account? 
+      Don't have an account?
       <RouterLink to="/register" class="text-pink-600 font-medium hover:underline">
         Register here
       </RouterLink>
     </p>
   </section>
+
+    <Modal
+    :show="showErrorModal"
+    :message="errorMessage"
+    @close="showErrorModal = false"
+  />
+
 </template>
