@@ -1,17 +1,33 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import Button from '@/components/atoms/Button.vue'
 import Input from '@/components/atoms/Input.vue'
+import Modal from '@/components/organisms/Modal.vue'
+import { useAuthStore } from '@/stores/auth'
+
+const router = useRouter()
+const auth = useAuthStore()
+auth.ensureInit()
 
 const formData = ref({
   username: '',
   email: '',
   password: '',
-  confirmPassword: ''
+  confirmPassword: '',
 })
 
-const handleRegister = () => {
-  console.log('Register attempt:', formData.value)
+const showError = ref(false)
+const errorMessage = ref('')
+
+const handleRegister = async () => {
+  try {
+    await auth.register(formData.value)
+    router.push('/profile')
+  } catch (e) {
+    errorMessage.value = e instanceof Error ? e.message : 'Registrierung fehlgeschlagen.'
+    showError.value = true
+  }
 }
 </script>
 
@@ -19,71 +35,48 @@ const handleRegister = () => {
   <section class="space-y-6 max-w-md mx-auto">
     <div>
       <h1 class="text-3xl font-extrabold text-gray-900">Register</h1>
-      <p class="text-gray-600 mt-2">Create your account to start meeting new people.</p>
+      <p class="text-gray-600 mt-2">Create your account.</p>
     </div>
 
-    <form @submit.prevent="handleRegister" class="space-y-4">
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">
-          Username <span class="text-red-500">*</span>
-        </label>
-        <Input
-          v-model="formData.username"
-          type="text"
-          required
-          placeholder="Choose a username"
-        />
-      </div>
+    <form class="space-y-4" @submit.prevent="handleRegister">
+      <Input
+        v-model="formData.username"
+        label="Username *"
+        required
+        placeholder="Choose a username"
+      />
+      <Input
+        v-model="formData.email"
+        label="Email *"
+        type="email"
+        required
+        placeholder="you@example.com"
+      />
+      <Input
+        v-model="formData.password"
+        label="Password *"
+        type="password"
+        required
+        placeholder="min. 6 Zeichen"
+      />
+      <Input
+        v-model="formData.confirmPassword"
+        label="Confirm Password *"
+        type="password"
+        required
+        placeholder="repeat password"
+      />
 
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">
-          Email <span class="text-red-500">*</span>
-        </label>
-        <Input
-          v-model="formData.email"
-          type="email"
-          required
-          placeholder="your@email.com"
-        />
-      </div>
-
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">
-          Password <span class="text-red-500">*</span>
-        </label>
-        <Input
-          v-model="formData.password"
-          type="password"
-          required
-          placeholder="Create a password"
-        />
-      </div>
-
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">
-          Confirm Password <span class="text-red-500">*</span>
-        </label>
-        <Input
-          v-model="formData.confirmPassword"
-          type="password"
-          required
-          placeholder="Confirm your password"
-        />
-      </div>
-
-      <Button
-        type="submit"
-        fullWidth
-      >
-        Create Account
-      </Button>
+      <Button type="submit" full-width>Create Account</Button>
     </form>
 
     <p class="text-center text-gray-600">
       Already have an account?
-      <RouterLink to="/login" class="text-pink-600 font-medium hover:underline">
-        Login here
-      </RouterLink>
+      <RouterLink to="/login" class="text-pink-600 font-medium hover:underline"
+        >Login here</RouterLink
+      >
     </p>
+
+    <Modal :show="showError" :message="errorMessage" @close="showError = false" />
   </section>
 </template>
