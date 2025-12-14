@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
-import NavBar from '@/components/organisms/NavBar.vue'  
+import NavBar from '@/components/organisms/NavBar.vue'
+import { useAuthStore } from '@/stores/auth'
+
+const auth = useAuthStore()
+auth.ensureInit()
 </script>
 
 <template>
