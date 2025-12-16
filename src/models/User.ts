@@ -21,8 +21,11 @@ export interface PublicProfile {
 }
 
 export interface RegisterInput {
+  salutation: 'male' | 'female' | 'other' | ''
+  otherSalutation: string
   username: string
   email: string
+  country: string
   password: string
   confirmPassword: string
 }
