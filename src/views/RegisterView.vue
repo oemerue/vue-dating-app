@@ -36,7 +36,7 @@ const registerSchema = yup.object({
   salutation: yup.string().required('Salutation is required'),
   // "otherSalutation"  salutation === 'Other'
   otherSalutation: yup.string().when('salutation', {
-    is: 'Other',
+    is: 'other',
     then: (schema) => schema.required('Please specify detail').max(30, 'Max 30 chars'),
     otherwise: (schema) => schema.notRequired()
   }),
@@ -92,7 +92,7 @@ const handleRegister = async () => {
           <option value="" disabled>Select...</option>
           <option value="Male">Male</option>
           <option value="Female">Female</option>
-          <option value="Other">Other</option>
+          <option value="other">Other</option>
         </select>
       </div>
 
